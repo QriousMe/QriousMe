@@ -19,6 +19,8 @@ app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
+app.use( express.cookieParser() );
+app.use(express.session({ secret: 'your secret here' }));
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -28,7 +30,12 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/users', user.list);
+app.get('/login', routes.login);
+app.get('/auth/twitter', routes.auth.twitter);
+app.get('/auth/twitter/callback', routes.auth.twitter.callback);
+app.post('/post', routes.post);
+app.get('/logout', routes.logout);
+app.get('/search/:term', routes.search);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

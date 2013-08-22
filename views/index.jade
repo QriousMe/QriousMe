@@ -1,5 +1,22 @@
-extends layout
+h1 Successfully authenticated.
 
-block content
-  h1= title
-  p Welcome to #{title}
+// index.jade
+form(name="input", action="/post", method="post")#tweet
+  input(type="text", name="text")
+  input(type="submit", value="ツイート。")
+
+p
+  a(href='/logout') -Logout-
+
+script
+  // client side script
+  $('#tweet').submit(function (e) {
+    var text = e.target.text.value;
+    $.ajax({
+      url: '/post',
+      type: 'POST',
+      data: {text: text},
+      success: function (e) {alert('Successfully tweeted.');}
+    });
+    return false;
+  });
